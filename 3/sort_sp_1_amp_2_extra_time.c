@@ -32,13 +32,14 @@ int main(int argc, char const *argv[]) {
     time_t start_t, end_t;
     double diff_t;
 
-    srand(time(0));
-    random(a, SIZE_A, MAX_NUM);
-	
     time(&start_t);
-    // 计数排序和桶排序
-    counter_sort(a, sorted_a, SIZE_A, MAX_NUM);
-    // bucket_sort_extra(a, sorted_a, SIZE_A, BK_NUM);
+    for(int i = 1; i <= 1000000; i++){
+        srand(time(0));
+        random(a, SIZE_A, MAX_NUM);
+        // 计数排序和桶排序
+        counter_sort(a, sorted_a, SIZE_A, MAX_NUM);
+        // bucket_sort_extra(a, sorted_a, SIZE_A, BK_NUM);
+    }
     time(&end_t);
     diff_t = difftime(end_t, start_t);  // 求函数运行前后的时间差
 

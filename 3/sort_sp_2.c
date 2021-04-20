@@ -4,27 +4,22 @@
 # include<windows.h>
 # include<assert.h>
 # define SIZE_A 100
-# define MAX_NUM 99
-// 在此更改随机生成的数组的长度和随机数最大值,同时记得更改zen_print()中的打印模式
+// 在此更改随机生成的数组的长度
 # define BK_NUM 10
 // 桶的数量,请随着随机数最大值更改,同时更改bucket_sort()中的存入桶部分
 
-typedef int DataType;
+typedef double DataType;
 struct bucket{
     DataType a[SIZE_A];
     int num;
 };
 void swap(DataType *a, DataType *b);
-void random(DataType a[], int n, int range_max_num);
+void random_r(DataType a[], int n);         // 生成[0,1)的实数
 void zen_print(DataType a[], int n);        // n表示存放元素的个数
 
 void bubble_sort(DataType a[], int n);      // 冒泡排序
 
-void counter_sort(DataType a[], DataType sorted_a[], int n, int maxkey);        // 计数排序
-void counter_sort_clear(DataType a[], DataType sorted_a[], int n, int maxkey);  // 更简明的计数排序
-
-void bucket_sort_extra(DataType a[], DataType sorted_a[], int n, int num_bucket);     // 桶排序
-// 对于桶排序, 进行了一些修改,使得它可以完成与计数排序差不多的功能
+void bucket_sort(DataType a[], DataType sorted_a[], int n, int num_bucket);     // 桶排序
 
 int main(int argc, char const *argv[]) {
     DataType a[SIZE_A], sorted_a[SIZE_A];
@@ -33,12 +28,10 @@ int main(int argc, char const *argv[]) {
     double diff_t;
 
     srand(time(0));
-    random(a, SIZE_A, MAX_NUM);
-	
+    random_r(a, SIZE_A);
+
     time(&start_t);
-    // 计数排序和桶排序
-    counter_sort(a, sorted_a, SIZE_A, MAX_NUM);
-    // bucket_sort_extra(a, sorted_a, SIZE_A, BK_NUM);
+    bucket_sort(a, sorted_a, SIZE_A, BK_NUM);
     time(&end_t);
     diff_t = difftime(end_t, start_t);  // 求函数运行前后的时间差
 
@@ -56,15 +49,15 @@ void swap(DataType *a, DataType *b){
     *b = temp;
 }
 
-void random(DataType a[], int n, int range_max_num){
+void random_r(DataType a[], int n){
     int i;
-    for(i = 0; i < n; i++) a[i] = rand() % (range_max_num + 1);    // 随机数存入数组
+    for(i = 0; i < n; i++) a[i] = rand() / (RAND_MAX + 1.0);
 }
 
 void zen_print(DataType a[], int n){
     int i;
     for(i = 0; i < n; i++){
-        printf("%4d", a[i]);
+        printf("%f ", a[i]);
     }
     printf("\n");
 }
@@ -76,40 +69,10 @@ void bubble_sort(DataType a[], int n){
     }
 }
 
-void counter_sort(DataType a[], DataType sorted_a[], int n, int maxkey){
-    int key, i;
-    int count[maxkey + 1];
-    for (key = 0; key <= maxkey; key++) count[key] = 0;
-    for (i = 0; i < n; i++) count[a[i]]++;
-
-    int start = 0, next;
-    for (key = 0; key <= maxkey; key++){
-        next = start + count[key];
-        count[key] = start;
-        start = next;
-    }
-    assert(start == n);
-
-    for (i = 0; i < n; i++) sorted_a[count[a[i]]++] = a[i]; // 相同的元素会放在下一位
-}
-
-void counter_sort_clear(DataType a[], DataType sorted_a[], int n, int maxkey){
-    int key, i;
-    int count[maxkey + 1];
-    for (key = 0; key <= maxkey; key++) count[key] = 0;
-    for (i = 0; i < n; i++) count[a[i]]++;
-
-    int pos = 0;
-    for (key = 0; key <= maxkey; key++){
-        for(i = 1; i <= count[key]; i++){
-            sorted_a[pos++] = key;
-        }
-    }
-}
-
-void bucket_sort_extra(DataType a[], DataType sorted_a[], int n, int num_bucket){
+void bucket_sort(DataType a[], DataType sorted_a[], int n, int num_bucket){
     struct bucket bk[num_bucket];
     int i, j;
+    double standard = 1.0 / num_bucket;
     int i4s = 0;    // i4s i for sorted_a
 
     for (i = 0; i < num_bucket; i++) {  // 初始化
@@ -117,7 +80,7 @@ void bucket_sort_extra(DataType a[], DataType sorted_a[], int n, int num_bucket)
     }
 
     for (i = 0; i < n; i++) {           // 存入桶
-        int k = a[i] / 10;
+        int k = (int)(a[i] / standard);
         bk[k].a[bk[k].num] = a[i];
         bk[k].num ++;
     }
