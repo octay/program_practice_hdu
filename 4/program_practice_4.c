@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
 
 #define alpha 0.04
@@ -21,19 +20,32 @@ struct Data {
     10  double ptratio; // 城镇师生比例
     11  double b;       // 1000(Bk-0.63)^2 Bk指代城镇中黑人的比例
     12  double lstat;   // 低收入人群的比例
-    13  double medv;    // 自住房的平均放假
+    13  double medv;    // 自住房的平均房价
     */
 };
-struct RefineK{
+struct RefineK {
     double value;       // 值
     int parameter_tied; // 与之相绑定的参数
 };
 struct Data data[1000];
 int train_num, test_num;
-double k_parameter[14];         // 13 k 1 b
+double k_parameter[14];         // 13 k 1 b     0~12 k 13 b
 // k_crim, k_zn, k_indus, k_chas, k_nox, k_rm, k_age, k_dis, k_rad, k_tax, k_ptratio, k_b, k_lstat, b
-double resu;
+double resu = 0, refine_resu = 0;
 struct RefineK refine_k[4];
+
+int input();    // 输入数据
+void init();    // 归一化输入的数据并且初始化存储各参数加权的数组
+void show_initiated();  // 打印归一化后的数据
+void show_k();  // 打印各参数加权
+void gd();      // 实现梯度下降算法
+void model_access();    // 模型评估
+void show_resu();       // 打印评估
+
+void refine_select();   // 挑选靠前的权重 这就是优化
+void show_refine_k();   // 打印靠前的各参数加权
+void refine_model_access();     // 优化后的模型评估
+void show_refine_resu();        // 打印优化后的评估
 
 int input() {
     char fname[256];
@@ -61,7 +73,7 @@ int input() {
 
     fclose(fp);
     return 1;
-};
+}
 
 void init() {
     double max[14], min[14];    // 在init()中的数组
@@ -91,11 +103,11 @@ void init() {
     for (int i = 0; i < 14; i++) {
         k_parameter[i] = 0;
     }
-};
+}
 
-void show_initiated() {      // 检验归一化可行与否
+void show_initiated() {
     printf("\ncheck if init() works as expected \n");
-    for (int i = 0; i < train_num; i++) {
+    for (int i = 0; i < train_num + test_num; i++) {
         for (int j = 0; j < 14; j++) {
             printf("%lf", data[i].parameter[j]);
             if (j == 13) printf("\n");
@@ -107,16 +119,7 @@ void show_initiated() {      // 检验归一化可行与否
 void show_k() {
     printf("\ncheck if gd() works as expected \n");
     for (int i = 0; i < 14; i++) {
-        printf("k_parameter[%d] = %lf \n", i, k_parameter[i]);
-    }
-}
-
-void show_k_brief() {
-    printf("\ncheck if gd() works as expected \n");
-    for (int i = 0; i < 14; i++) {
-        printf("%lf", k_parameter[i]);
-        if (i == 13) printf("\n");
-        else printf(" ");
+        printf("k_parameter %d = %lf \n", i, k_parameter[i]);
     }
 }
 
@@ -129,12 +132,13 @@ void gd() {
                 if (j == 13) sum1[i] += k_parameter[13];
                 else sum1[i] += k_parameter[j] * data[i].parameter[j];
             }
-            sum1[i] -= data[i].parameter[14];
+            sum1[i] -= data[i].parameter[13];
         }
         for (int j = 0; j < 14; j++) {
             sum2[j] = 0;
             for (int i = 0; i < train_num; i++) {
-                sum2[j] += sum1[i] * data[i].parameter[j];
+                if (j == 13) sum2[j] += sum1[i];
+                else sum2[j] += sum1[i] * data[i].parameter[j];
             }
             k_parameter[j] -= alpha * sum2[j] / train_num;
         }
@@ -142,8 +146,7 @@ void gd() {
 }
 
 void model_access() {
-    double sum3 = 0;
-    int y = 0;
+    double y;
     for (int i = train_num; i < train_num + test_num; i++) {
         // data array :
         // 0 ~ train_num-1 (all train_num)
@@ -153,13 +156,59 @@ void model_access() {
             if (j == 13) y += k_parameter[13];
             else y += k_parameter[j] * data[i].parameter[j];
         }
-        sum3 += (y - data[i].parameter[14]) * (y - data[i].parameter[14]);
+        resu += (y - data[i].parameter[13]) * (y - data[i].parameter[13]);
     }
-    resu = sqrt(sum3 / test_num);
+    resu = sqrt(resu / test_num);
 }
 
 void show_resu() {
     printf("\n%lf%%\n", resu * 100);
+}
+
+void refine_select() {
+    for (int i = 0; i < 4; ++i) {
+        refine_k[i].value = 0;
+        refine_k[i].parameter_tied = -1;
+    }
+    for (int i = 0; i <= 3; i++) {
+        double max = 0;
+        int i_max = -1;
+        for (int j = 0; j < 14; ++j) {
+            if (k_parameter[j] * k_parameter[j] > max * max && j != refine_k[0].parameter_tied &&
+                j != refine_k[1].parameter_tied && j != refine_k[2].parameter_tied && j != refine_k[3].parameter_tied) {
+                // 这里的条件需要更改可能
+                max = k_parameter[j];
+                i_max = j;
+            } else continue;
+        }
+        refine_k[i].value = max;
+        refine_k[i].parameter_tied = i_max;
+    }
+}
+
+void show_refine_k() {
+    printf("\ncheck if refine_select() works as expected \n");
+    for (int i = 0; i < 4; ++i) {
+        printf("k_parameter %d = %lf \n", refine_k[i].parameter_tied, refine_k[i].value);
+    }
+}
+
+void refine_model_access() {
+    double y;
+    for (int i = train_num; i < train_num + test_num; i++) {
+        // 4 selected k of parameter
+        y = 0;
+        for (int j = 0; j < 4; j++) {
+            if (refine_k[j].parameter_tied == 13) y += refine_k[j].value;
+            else y += refine_k[j].value * data[i].parameter[refine_k[j].parameter_tied];
+        }
+        refine_resu += (y - data[i].parameter[13]) * (y - data[i].parameter[13]);
+    }
+    refine_resu = sqrt(refine_resu / test_num);
+}
+
+void show_refine_resu() {
+    printf("\n%lf%%\n", refine_resu * 100);
 }
 
 int main(void) {
@@ -167,12 +216,17 @@ int main(void) {
     init();
     // show_initiated();
     gd();
-    show_k();
+    // show_k();
     model_access();
     show_resu();
+
+    printf("\nrefine the model \n");
+    refine_select();
+    // show_refine_k();
+    refine_model_access();
+    show_refine_resu();
     return 0;
 }
-
 
 
 // 原先的init()函数 写完瞬间弃
