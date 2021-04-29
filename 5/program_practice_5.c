@@ -27,7 +27,7 @@ int train_num, test_num;
 int wrong_judge = 0;
 
 int input();    // 输入数据
-void print_iris_data(); // 打印iris[]中的数据已验证input()是否正常工作
+void print_iris_data(); // 打印iris[]中的数据已验证input()random_order()是否正常工作
 void judge();   // 判断并评估
 double cal_distance();      // 计算距离
 void print_accuracy();
@@ -37,7 +37,7 @@ void random_order();    // 打乱测试集与训练集的顺序
 int main(void) {
     if (input() == 0) return 0;
     random_order();
-    print_iris_data();
+    // print_iris_data();
     judge();
     print_accuracy();
     return 0;
@@ -130,13 +130,13 @@ double cal_distance(int i1, int i2) {
 
 void print_accuracy() {
     double accuracy = 100.0 - 100.0 * wrong_judge / test_num;
-    printf("\naccuracy : %lf%%\n", accuracy);
+    printf("\naccuracy : %lf%% \nwrong judge time(s) : %d \n", accuracy, wrong_judge);
 }
 
 void random_order() {
     int random1, random2;
     struct Iris temp;
-    srand((unsigned)time(NULL));
+    srand((unsigned) time(NULL));
     for (int i = 0; i < random_times; ++i) {
         random1 = rand() % (train_num + test_num);
         random2 = rand() % (train_num + test_num);
