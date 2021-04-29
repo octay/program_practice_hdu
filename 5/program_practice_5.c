@@ -11,7 +11,7 @@
 // Iris-setosa 1
 // Iris-versicolor 2
 // Iris-virginica 3
-#define random_times 10000
+#define random_times 1000
 
 struct Iris {
     double sepal_length, sepal_width, petal_length, petal_width;
@@ -136,13 +136,12 @@ void print_accuracy() {
 void random_order() {
     int random1, random2;
     struct Iris temp;
+    srand((unsigned)time(NULL));
     for (int i = 0; i < random_times; ++i) {
-        srand(time(NULL));
-        random1 = rand() % (train_num + test_num);      // [0,train_num+test_num)
-        srand(time(NULL));
+        random1 = rand() % (train_num + test_num);
         random2 = rand() % (train_num + test_num);
         temp = iris[random1];
-        iris[random1]=iris[random2];
-        iris[random2]= temp;
+        iris[random1] = iris[random2];
+        iris[random2] = temp;
     }
 }
