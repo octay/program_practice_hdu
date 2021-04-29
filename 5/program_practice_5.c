@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include <float.h>
+#include <time.h>
 
 #define iris1 "Iris-setosa"
 #define iris2 "Iris-versicolor"
@@ -10,6 +11,7 @@
 // Iris-setosa 1
 // Iris-versicolor 2
 // Iris-virginica 3
+#define random_times 10000
 
 struct Iris {
     double sepal_length, sepal_width, petal_length, petal_width;
@@ -30,9 +32,12 @@ void judge();   // 判断并评估
 double cal_distance();      // 计算距离
 void print_accuracy();
 
+void random_order();    // 打乱测试集与训练集的顺序
+
 int main(void) {
     if (input() == 0) return 0;
-    // print_iris_data();
+    random_order();
+    print_iris_data();
     judge();
     print_accuracy();
     return 0;
@@ -56,8 +61,8 @@ int input() {
         fscanf(fp, "%lf,%lf,%lf,%lf,%s", &iris[i].sepal_length, &iris[i].sepal_width, \
         &iris[i].petal_length, &iris[i].petal_width, name);
         if (strcmp(name, iris1) == 0) iris[i].variety_id = 1;
-        if (strcmp(name, iris2) == 0) iris[i].variety_id = 2;
-        if (strcmp(name, iris3) == 0) iris[i].variety_id = 3;
+        else if (strcmp(name, iris2) == 0) iris[i].variety_id = 2;
+        else if (strcmp(name, iris3) == 0) iris[i].variety_id = 3;
     }
 
     fclose(fp);
@@ -124,6 +129,20 @@ double cal_distance(int i1, int i2) {
 }
 
 void print_accuracy() {
-    double accuracy = 100.0 * wrong_judge / test_num;
+    double accuracy = 100.0 - 100.0 * wrong_judge / test_num;
     printf("\naccuracy : %lf%%\n", accuracy);
+}
+
+void random_order() {
+    int random1, random2;
+    struct Iris temp;
+    for (int i = 0; i < random_times; ++i) {
+        srand(time(NULL));
+        random1 = rand() % (train_num + test_num);      // [0,train_num+test_num)
+        srand(time(NULL));
+        random2 = rand() % (train_num + test_num);
+        temp = iris[random1];
+        iris[random1]=iris[random2];
+        iris[random2]= temp;
+    }
 }
