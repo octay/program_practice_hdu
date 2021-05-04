@@ -129,7 +129,7 @@ void gd() {
         double sum2[14] = {0};
         for (int i = 0; i < train_num; i++) {
             for (int j = 0; j < 14; j++) {
-                if (j == 13) sum1[i] += k_parameter[13];
+                if (j == 13) sum1[i] += k_parameter[13]  * 1;
                 else sum1[i] += k_parameter[j] * data[i].parameter[j];
             }
             sum1[i] -= data[i].parameter[13];
@@ -137,7 +137,7 @@ void gd() {
         for (int j = 0; j < 14; j++) {
             sum2[j] = 0;
             for (int i = 0; i < train_num; i++) {
-                if (j == 13) sum2[j] += sum1[i];
+                if (j == 13) sum2[j] += sum1[i] * 1;
                 else sum2[j] += sum1[i] * data[i].parameter[j];
             }
             k_parameter[j] -= alpha * sum2[j] / train_num;
@@ -225,6 +225,7 @@ int main(void) {
     // show_refine_k();
     refine_model_access();
     show_refine_resu();
+
     return 0;
 }
 
