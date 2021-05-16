@@ -33,6 +33,7 @@ double k_parameter[14];         // 13 k 1 b     0~12 k 13 b
 // k_crim, k_zn, k_indus, k_chas, k_nox, k_rm, k_age, k_dis, k_rad, k_tax, k_ptratio, k_b, k_lstat, b
 double resu = 0, refine_resu = 0;
 struct RefineK refine_k[4];
+double max[14], min[14];
 
 int input();    // 输入数据
 void init();    // 归一化输入的数据并且初始化存储各参数加权的数组
@@ -76,7 +77,6 @@ int input() {
 }
 
 void init() {
-    double max[14], min[14];    // 在init()中的数组
     // 不要归一化
     // 3   int chas;       // 是否临近查尔斯河 边界是河流1
     for (int i = 0; i < 14; i++) {
@@ -129,7 +129,7 @@ void gd() {
         double sum2[14] = {0};
         for (int i = 0; i < train_num; i++) {
             for (int j = 0; j < 14; j++) {
-                if (j == 13) sum1[i] += k_parameter[13]  * 1;
+                if (j == 13) sum1[i] += k_parameter[13] * 1;
                 else sum1[i] += k_parameter[j] * data[i].parameter[j];
             }
             sum1[i] -= data[i].parameter[13];
@@ -156,13 +156,14 @@ void model_access() {
             if (j == 13) y += k_parameter[13];
             else y += k_parameter[j] * data[i].parameter[j];
         }
-        resu += (y - data[i].parameter[13]) * (y - data[i].parameter[13]);
+        resu += ((y * (max[13] - min[13]) + min[13]) - (data[i].parameter[13] * (max[13] - min[13]) + min[13])) *
+                ((y * (max[13] - min[13]) + min[13]) - (data[i].parameter[13] * (max[13] - min[13]) + min[13]));
     }
     resu = sqrt(resu / test_num);
 }
 
 void show_resu() {
-    printf("\n%lf%%\n", resu * 100);
+    printf("\n%lf\n", resu);
 }
 
 void refine_select() {
@@ -170,18 +171,18 @@ void refine_select() {
         refine_k[i].value = 0;
         refine_k[i].parameter_tied = -1;
     }
-    for (int i = 0; i <= 3; i++) {
-        double max = 0;
+    for (int i = 0; i < 4; i++) {
+        double max_k = 0;
         int i_max = -1;
-        for (int j = 0; j < 14; ++j) {
-            if (k_parameter[j] * k_parameter[j] > max * max && j != refine_k[0].parameter_tied &&
+        for (int j = 0; j < 13; ++j) {
+            if (k_parameter[j] * k_parameter[j] > max_k * max_k && j != refine_k[0].parameter_tied &&
                 j != refine_k[1].parameter_tied && j != refine_k[2].parameter_tied && j != refine_k[3].parameter_tied) {
                 // 这里的条件需要更改可能
-                max = k_parameter[j];
+                max_k = k_parameter[j];
                 i_max = j;
             } else continue;
         }
-        refine_k[i].value = max;
+        refine_k[i].value = max_k;
         refine_k[i].parameter_tied = i_max;
     }
 }
@@ -199,16 +200,17 @@ void refine_model_access() {
         // 4 selected k of parameter
         y = 0;
         for (int j = 0; j < 4; j++) {
-            if (refine_k[j].parameter_tied == 13) y += refine_k[j].value;
-            else y += refine_k[j].value * data[i].parameter[refine_k[j].parameter_tied];
+            y += refine_k[j].value * data[i].parameter[refine_k[j].parameter_tied];
         }
-        refine_resu += (y - data[i].parameter[13]) * (y - data[i].parameter[13]);
+        y += k_parameter[13];
+        refine_resu += ((y * (max[13] - min[13]) + min[13]) - (data[i].parameter[13] * (max[13] - min[13]) + min[13])) *
+                       ((y * (max[13] - min[13]) + min[13]) - (data[i].parameter[13] * (max[13] - min[13]) + min[13]));
     }
     refine_resu = sqrt(refine_resu / test_num);
 }
 
 void show_refine_resu() {
-    printf("\n%lf%%\n", refine_resu * 100);
+    printf("\n%lf\n", refine_resu);
 }
 
 int main(void) {
