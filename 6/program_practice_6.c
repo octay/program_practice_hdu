@@ -247,8 +247,7 @@ void test() {
         // 打印内容
         printf("num : %d pre : ", k + 1);
         for (int i = 0; i < outNum; ++i)
-            printf("%d %f", (int) (pre_variety_id[k][i] * (max_out[i] - min_out[i]) + min_out[i] + 0.5),
-                   pre_variety_id[k][i]); // 反归一化
+            printf("%d ", (int) (pre_variety_id[k][i] * (max_out[i] - min_out[i]) + min_out[i] + 0.5)); // 反归一化
         printf("act : ");
         for (int i = 0; i < outNum; ++i) printf("%d ", (int) iris[k].variety_id[i]);
         printf("\n");
@@ -269,6 +268,7 @@ void test() {
         rmse += sum1 / outNum;
     }
     rmse = sqrt(rmse / TestNum);
-    printf("\nrmse : %lf\nwrong judge : %d\naccuracy : %lf\n", rmse, wrong_judge, ((double) wrong_judge )/ TestNum);
+    printf("\nrmse : %lf\nwrong judge : %d\naccuracy : %.3lf%%\n", rmse, wrong_judge,
+           (1 - ((double) wrong_judge) / TestNum) * 100);
     //        rmse        wrong judge       accuracy
 }
