@@ -1,6 +1,6 @@
 /*
  * based on utf-8
- * program practice final assignment
+ * program practice final assignment in hdu
  * management system for in and out
  * authors' github : @hphuimen @octay @yeshuimuhua
  * ver0.1
@@ -11,6 +11,7 @@
 #include <windows.h>
 #include <limits.h>
 #include <ctype.h>
+#include <conio.h>
 
 // starting x-coordinates
 #define POS_X1 35       // 菜单 第一列 & 输出提示 排序后
@@ -24,6 +25,7 @@
 #define NAME_LEN 10     // length of name
 #define COM_LEN 10      // length of company's name
 #define PARTICULAR_LEN 140  // length of particular
+#define INPUT_FILE_NAME "input.txt"
 
 struct time_info {
     int year;
@@ -40,7 +42,7 @@ struct hito_info {
     char tel[11 + 1];   // + 1 means to leave room for '\0' based on the ori
     char id[18 + 1];
     char company[COM_LEN];
-    char car_num[7 + 1];
+    char car_num[10 + 1];
     char particular[PARTICULAR_LEN];
     char guarantee_name[NAME_LEN];
     char guarantee_tel[11 + 1];
@@ -64,6 +66,10 @@ void SubmitApp();           // 申请
 void CheckI();              // 登入
 void CheckO();              // 登出
 
+void Hide();    // 隐藏光标
 void SetPosition(int x, int y);     // 设置起始位置
-void InitHitoArray(int length);     // 初始化数组
+void InitHitoArray(int length);     // 初始化数组 为一些成员赋值
 int TxtLine(char *fname);   // txt文件中的换行符数量
+
+void SearchDay();  //按日期查找，精确到天，默认日期以实际出入时间为准
+void SearchPeriod(); //  按时间段查找，可精确到天、时、分三个模式，默认时间以实际出入时间为准,如果以时、分两个模式查找，默认是同年同月同日
