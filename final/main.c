@@ -212,6 +212,7 @@ void AppendRecord() {
 
         hito[count_record] = temp_hito;
         count_record++;
+        SetPosition(POS_X2, pos_y += 2);
         printf("录入完成");
     } else if (how_to_input_ch == 2) {    // 从文件录入
         char file_name[20] = INPUT_FILE_NAME;
@@ -251,6 +252,7 @@ void AppendRecord() {
             hito[count_record] = temp_hito;
             count_record++;
         }
+        fclose(fp);
         printf("录入完成");
         Hide();        //隐藏光标
         char ch = _getch();
@@ -289,26 +291,24 @@ void SearchName() {
             {
                 printf("%d. ", k);
                 printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
-                printf("申请进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
                        hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
                        hito[i].in_time_app.sec);
-                printf("申请离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
                        hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
                        hito[i].out_time_app.sec);
-                printf("实际进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
                        hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
                        hito[i].in_time_act.sec);
-                printf("实际离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
                        hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
                        hito[i].out_time_act.sec);
                 k++;
                 printf("\n");
             }
         }
-        printf("一共找到%d条记录\n", k - 1);
-        if (k == 1) {
-            printf("未找到这个姓名对应的记录\n");
-        }
+        if (k == 1) printf("未找到这个姓名对应的记录\n");
+        else printf("一共找到%d条记录\n", k - 1);
     } else if (mode == 2) {
         char dimname2seek[NAME_LEN];
         printf("请输入你要模糊查找的人的姓名：");
@@ -317,26 +317,24 @@ void SearchName() {
             if (strstr(hito[i].name, dimname2seek) != NULL) {
                 printf("%d. ", k);
                 printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
-                printf("申请进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
                        hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
                        hito[i].in_time_app.sec);
-                printf("申请离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
                        hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
                        hito[i].out_time_app.sec);
-                printf("实际进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
                        hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
                        hito[i].in_time_act.sec);
-                printf("实际离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
                        hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
                        hito[i].out_time_act.sec);
                 k++;
                 printf("\n");
             }
         }
-        printf("一共找到%d条记录\n", k - 1);
-        if (k == 1) {
-            printf("未找到这个姓名对应的记录\n");
-        }
+        if (k == 1) printf("未找到这个姓名对应的记录\n");
+        else printf("一共找到%d条记录\n", k - 1);
     } else printf("模式输入错误\n");
     Hide();        //隐藏光标
     char ch = _getch();
@@ -357,26 +355,24 @@ void SearchTel() {
             if (strcmp(hito[i].tel, tel2seek) == 0) {
                 printf("%d. ", k);
                 printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
-                printf("申请进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
                        hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
                        hito[i].in_time_app.sec);
-                printf("申请离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
                        hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
                        hito[i].out_time_app.sec);
-                printf("实际进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
                        hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
                        hito[i].in_time_act.sec);
-                printf("实际离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
                        hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
                        hito[i].out_time_act.sec);
                 k++;
                 printf("\n");
             }
         }
-        printf("一共找到%d条记录\n", k - 1);
-        if (k == 1) {
-            printf("未找到这个电话对应的记录\n");
-        }
+        if (k == 1) printf("未找到这个电话对应的记录\n");
+        else printf("一共找到%d条记录\n", k - 1);
     } else if (mode == 2) {
         char dimtel2seek[12];
         printf("请输入你要模糊查找的人的电话：");
@@ -385,26 +381,24 @@ void SearchTel() {
             if (strstr(hito[i].tel, dimtel2seek) != NULL) {
                 printf("%d. ", k);
                 printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
-                printf("申请进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
                        hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
                        hito[i].in_time_app.sec);
-                printf("申请离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
                        hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
                        hito[i].out_time_app.sec);
-                printf("实际进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
                        hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
                        hito[i].in_time_act.sec);
-                printf("实际离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
                        hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
                        hito[i].out_time_act.sec);
                 k++;
                 printf("\n");
             }
         }
-        printf("一共找到%d条记录\n", k - 1);
-        if (k == 1) {
-            printf("未找到这个电话对应的记录\n");
-        }
+        if (k == 1) printf("未找到这个电话对应的记录\n");
+        else printf("一共找到%d条记录\n", k - 1);
     } else printf("模式输入错误\n");
     Hide();        //隐藏光标
     char ch = _getch();
@@ -425,26 +419,24 @@ void SearchID() {
             if (strcmp(hito[i].id, id2seek) == 0) {
                 printf("%d. ", k);
                 printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
-                printf("申请进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
                        hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
                        hito[i].in_time_app.sec);
-                printf("申请离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
                        hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
                        hito[i].out_time_app.sec);
-                printf("实际进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
                        hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
                        hito[i].in_time_act.sec);
-                printf("实际离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
                        hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
                        hito[i].out_time_act.sec);
                 k++;
                 printf("\n");
             }
         }
-        printf("一共找到%d条记录\n", k - 1);
-        if (k == 1) {
-            printf("未找到这个身份证号对应的记录\n");
-        }
+        if (k == 1) printf("未找到这个身份证号对应的记录\n");
+        else printf("一共找到%d条记录\n", k - 1);
     } else if (mode == 2) {
         char dimid2seek[19];
         printf("%d. ");
@@ -453,26 +445,24 @@ void SearchID() {
             if (strstr(hito[i].id, dimid2seek) != NULL) {
                 printf("%d. ", k);
                 printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
-                printf("申请进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
                        hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
                        hito[i].in_time_app.sec);
-                printf("申请离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
                        hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
                        hito[i].out_time_app.sec);
-                printf("实际进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
                        hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
                        hito[i].in_time_act.sec);
-                printf("实际离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
                        hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
                        hito[i].out_time_act.sec);
                 k++;
                 printf("\n");
             }
         }
-        printf("一共找到%d条记录\n", k - 1);
-        if (k == 1) {
-            printf("未找到这个身份证号对应的记录\n");
-        }
+        if (k == 1) printf("未找到这个身份证号对应的记录\n");
+        else printf("一共找到%d条记录\n", k - 1);
     } else printf("模式输入错误\n");
     Hide();        //隐藏光标
     char ch = _getch();
@@ -493,26 +483,24 @@ void SearchCarNum() {
             if (strcmp(hito[i].car_num, car_num2seek) == 0) {
                 printf("%d. ", k);
                 printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
-                printf("申请进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
                        hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
                        hito[i].in_time_app.sec);
-                printf("申请离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
                        hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
                        hito[i].out_time_app.sec);
-                printf("实际进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
                        hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
                        hito[i].in_time_act.sec);
-                printf("实际离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
                        hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
                        hito[i].out_time_act.sec);
                 k++;
                 printf("\n");
             }
         }
-        printf("一共找到%d条记录\n", k - 1);
-        if (k == 1) {
-            printf("未找到这个车牌号对应的记录\n");
-        }
+        if (k == 1) printf("未找到这个车牌号对应的记录\n");
+        else printf("一共找到%d条记录\n", k - 1);
     } else if (mode == 2) {
         char dimcar_num2seek[8];
         printf("请输入你要模糊查找的人的车牌号：");
@@ -521,26 +509,24 @@ void SearchCarNum() {
             if (strstr(hito[i].car_num, dimcar_num2seek) != NULL) {
                 printf("%d. ", k);
                 printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
-                printf("申请进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
                        hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
                        hito[i].in_time_app.sec);
-                printf("申请离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
                        hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
                        hito[i].out_time_app.sec);
-                printf("实际进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
                        hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
                        hito[i].in_time_act.sec);
-                printf("实际离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
                        hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
                        hito[i].out_time_act.sec);
                 k++;
                 printf("\n");
             }
         }
-        printf("一共找到%d条记录\n", k - 1);
-        if (k == 1) {
-            printf("未找到这个车牌号对应的记录\n");
-        }
+        if (k == 1) printf("未找到这个车牌号对应的记录\n");
+        else printf("一共找到%d条记录\n", k - 1);
     } else printf("模式输入错误\n");
     Hide();        //隐藏光标
     char ch = _getch();
@@ -562,14 +548,14 @@ void SearchDay() {
             hito[i].in_time_act.day == day2seek) {
             printf("%d. ", k);
             printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
-            printf("申请进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+            printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
                    hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min, hito[i].in_time_app.sec);
-            printf("申请离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+            printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
                    hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
                    hito[i].out_time_app.sec);
-            printf("实际进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+            printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
                    hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min, hito[i].in_time_act.sec);
-            printf("实际离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+            printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
                    hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
                    hito[i].out_time_act.sec);
             printf("已入校\n");
@@ -580,14 +566,14 @@ void SearchDay() {
             hito[i].out_time_act.day == day2seek) {
             printf("%d. ", k);
             printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
-            printf("申请进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+            printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
                    hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min, hito[i].in_time_app.sec);
-            printf("申请离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+            printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
                    hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
                    hito[i].out_time_app.sec);
-            printf("实际进入时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+            printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
                    hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min, hito[i].in_time_act.sec);
-            printf("实际离开时间：%d年%d月%d日%d时%d分%d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+            printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
                    hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
                    hito[i].out_time_act.sec);
             printf("已离校\n");
@@ -601,6 +587,247 @@ void SearchDay() {
     char ch = _getch();
 }
 
+void SearchPeriod() {
+    int i;
+    int k = 1;
+    int mode;
+    printf("1.精确到天  2.精确到小时  3.精确到分\n");
+    printf("请输入你要查找的模式：");
+    scanf("%d", &mode);
+    if (mode == 1) {
+        int start_year, start_mon, start_day, end_year, end_mon, end_day;
+        printf("请输入起始时间：\n");
+        printf("年份：");
+        scanf("%d", &start_year);
+        printf("月份：");
+        scanf("%d", &start_mon);
+        printf("日期：");
+        scanf("%d", &start_day);
+        printf("请输入终止时间：\n");
+        printf("年份：");
+        scanf("%d", &end_year);
+        printf("月份：");
+        scanf("%d", &end_mon);
+        printf("日期：");
+        scanf("%d", &end_day);
+        int start_time = start_year * 10000 + start_mon * 100 + start_day;
+        int end_time = end_year * 10000 + end_mon * 100 + end_day;
+        for (i = 0; i < count_record; i++) {
+            int in_time = hito[i].in_time_act.year * 10000 + hito[i].in_time_act.mon * 100 + hito[i].in_time_act.day;
+            int out_time =
+                    hito[i].out_time_act.year * 10000 + hito[i].out_time_act.mon * 100 + hito[i].out_time_act.day;
+            if (in_time >= start_time && in_time <= end_time) {
+                printf("%d. ", k);
+                printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
+                printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                       hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
+                       hito[i].in_time_app.sec);
+                printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                       hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
+                       hito[i].out_time_app.sec);
+                printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                       hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
+                       hito[i].in_time_act.sec);
+                printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                       hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
+                       hito[i].out_time_act.sec);
+                printf("已入校\n");
+                k++;
+                printf("\n");
+            }
+            if (out_time >= start_time && out_time <= end_time) {
+                printf("%d. ", k);
+                printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
+                printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                       hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
+                       hito[i].in_time_app.sec);
+                printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                       hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
+                       hito[i].out_time_app.sec);
+                printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                       hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
+                       hito[i].in_time_act.sec);
+                printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                       hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
+                       hito[i].out_time_act.sec);
+                printf("已离校\n");
+                k++;
+                printf("\n");
+            }
+        }
+        if (k == 1)printf("未找到该时间段对应的记录\n");
+        else printf("一共找到%d条记录\n", k - 1);
+    } else if (mode == 2) {
+        int year2seek, mon2seek, day2seek, start_hour, end_hour;
+        printf("请输入你要查找的年、月、日：\n");
+        printf("年份：");
+        scanf("%d", &year2seek);
+        printf("月份：");
+        scanf("%d", &mon2seek);
+        printf("日期：");
+        scanf("%d", &day2seek);
+        printf("请输入起始时间：\n");
+        printf("小时：");
+        scanf("%d", &start_hour);
+        printf("请输入终止时间：\n");
+        printf("小时：");
+        scanf("%d", &end_hour);
+        for (i = 0; i < count_record; i++) {
+            if (hito[i].in_time_act.year == year2seek && hito[i].in_time_act.mon == mon2seek &&
+                hito[i].in_time_act.day == day2seek &&
+                hito[i].in_time_act.hour >= start_hour && hito[i].in_time_act.hour <= end_hour) {
+                printf("%d. ", k);
+                printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
+                printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                       hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
+                       hito[i].in_time_app.sec);
+                printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                       hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
+                       hito[i].out_time_app.sec);
+                printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                       hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
+                       hito[i].in_time_act.sec);
+                printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                       hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
+                       hito[i].out_time_act.sec);
+                printf("已入校\n");
+                k++;
+                printf("\n");
+            }
+            if (hito[i].out_time_act.year == year2seek && hito[i].out_time_act.mon == mon2seek &&
+                hito[i].out_time_act.day == day2seek &&
+                hito[i].out_time_act.hour >= start_hour && hito[i].out_time_act.hour <= end_hour) {
+                printf("%d. ", k);
+                printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
+                printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                       hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
+                       hito[i].in_time_app.sec);
+                printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                       hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
+                       hito[i].out_time_app.sec);
+                printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                       hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
+                       hito[i].in_time_act.sec);
+                printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                       hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
+                       hito[i].out_time_act.sec);
+                printf("已离校\n");
+                k++;
+                printf("\n");
+            }
+        }
+        if (k == 1)printf("未找到该时间段对应的记录\n");
+        else printf("一共找到%d条记录\n", k - 1);
+    } else if (mode == 3) {
+        int year2seek, mon2seek, day2seek, start_hour, end_hour, start_min, end_min;
+        printf("请输入你要查找的年、月、日：\n");
+        printf("年份：");
+        scanf("%d", &year2seek);
+        printf("月份：");
+        scanf("%d", &mon2seek);
+        printf("日期：");
+        scanf("%d", &day2seek);
+        printf("请输入起始时间：\n");
+        printf("小时：");
+        scanf("%d", &start_hour);
+        printf("分：");
+        scanf("%d", &start_min);
+        printf("请输入终止时间：\n");
+        printf("小时：");
+        scanf("%d", &end_hour);
+        printf("分：");
+        scanf("%d", &end_min);
+        for (i = 0; i < count_record; i++) {
+            if (hito[i].in_time_act.year == year2seek && hito[i].in_time_act.mon == mon2seek &&
+                hito[i].in_time_act.day == day2seek &&
+                hito[i].in_time_act.hour >= start_hour && hito[i].in_time_act.hour <= end_hour &&
+                hito[i].in_time_act.min >= start_min && hito[i].in_time_act.min <= end_min) {
+                printf("%d. ", k);
+                printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
+                printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                       hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
+                       hito[i].in_time_app.sec);
+                printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                       hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
+                       hito[i].out_time_app.sec);
+                printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                       hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
+                       hito[i].in_time_act.sec);
+                printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                       hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
+                       hito[i].out_time_act.sec);
+                printf("已入校\n");
+                k++;
+                printf("\n");
+            }
+            if (hito[i].out_time_act.year == year2seek && hito[i].out_time_act.mon == mon2seek &&
+                hito[i].out_time_act.day == day2seek &&
+                hito[i].out_time_act.hour >= start_hour && hito[i].out_time_act.hour <= end_hour &&
+                hito[i].out_time_act.min >= start_min && hito[i].out_time_act.min <= end_min) {
+                printf("%d. ", k);
+                printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
+                printf("申请进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                       hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
+                       hito[i].in_time_app.sec);
+                printf("申请离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                       hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
+                       hito[i].out_time_app.sec);
+                printf("实际进入时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                       hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
+                       hito[i].in_time_act.sec);
+                printf("实际离开时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                       hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
+                       hito[i].out_time_act.sec);
+                printf("已离校\n");
+                k++;
+                printf("\n");
+            }
+        }
+        if (k == 1)printf("未找到该时间段对应的记录\n");
+        else printf("一共找到%d条记录\n", k - 1);
+    } else printf("模式输入错误\n");
+    Hide();        //隐藏光标
+    char ch = _getch();
+}
+
+void StoreRecord() {
+    char file_name[20] = OUTPUT_FILE_NAME;
+    FILE *fp;
+    int num_line;
+    int pos_y = 6;
+
+//    SetPosition(POS_X2, pos_y);
+//    printf("输入文件名");
+//    scanf("%s", file_name);
+
+    SetPosition(POS_X2, pos_y += 2);
+    if (!(fp = fopen(file_name, "w"))) {
+        printf("打开文件错误");
+        return;
+    }
+    for (int i = 0; i < count_record; ++i) {
+        // 姓名 身份证号 手机号码 公司 车牌号 担保人姓名 担保人电话号码 健康码颜色 是否经过疫区 是否有症状 申请入校时间 申请出校时间 实际入校时间 实际出校时间 申请理由
+        fprintf(fp, "%s %s %s %s %s %s %s %c %d %d", hito[i].name, hito[i].id, hito[i].tel, hito[i].company,
+                hito[i].car_num, hito[i].guarantee_name, hito[i].guarantee_tel, hito[i].health_code, hito[i].is_area,
+                hito[i].is_symptom);
+        fprintf(fp, " %d-%d-%d %d:%d:%d", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min, hito[i].in_time_app.sec);
+        fprintf(fp, " %d-%d-%d %d:%d:%d", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
+                hito[i].out_time_app.sec);
+        fprintf(fp, " %d-%d-%d %d:%d:%d", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min, hito[i].in_time_act.sec);
+        fprintf(fp, " %d-%d-%d %d:%d:%d", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
+                hito[i].out_time_act.sec);
+        fprintf(fp, " %s\n", hito[i].particular);
+    }
+    fclose(fp);
+    printf("保存完成");
+    Hide();        //隐藏光标
+    char ch = _getch();
+}
+
 // 不是系统模块函数
 void Hide() {
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -609,8 +836,8 @@ void Hide() {
 }
 
 void SetPosition(int x, int y) {
-    HANDLE hOut;
-    COORD pos;
+    HANDLE hOut;    // typedef void *HANDLE;
+    COORD pos;      // struct _COORD {SHORT X; SHORT Y;};
 
     hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     pos.X = x;

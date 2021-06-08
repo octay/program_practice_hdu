@@ -25,7 +25,8 @@
 #define NAME_LEN 10     // length of name
 #define COM_LEN 10      // length of company's name
 #define PARTICULAR_LEN 140  // length of particular
-#define INPUT_FILE_NAME "input.txt"
+#define INPUT_FILE_NAME "input.txt"     // default file name to get data conveniently
+#define OUTPUT_FILE_NAME "output.txt"   // default file name to store data
 
 struct time_info {
     int year;
@@ -46,9 +47,9 @@ struct hito_info {
     char particular[PARTICULAR_LEN];
     char guarantee_name[NAME_LEN];
     char guarantee_tel[11 + 1];
-    char health_code;    // green 'g' yellow 'y' red 'r'
-    int is_area;    // have been to epidemic area or not
-    int is_symptom; // have symptom of cough and fever or not
+    char health_code;   // green 'g' yellow 'y' red 'r'
+    int is_area;        // have been to epidemic area or not
+    int is_symptom;     // have symptom of cough and fever or not
     struct time_info in_time_app, out_time_app, in_time_act, out_time_act;  // in_ 入校 out_ 出校 _app 申请时间 _act 实际时间
 };
 
@@ -61,6 +62,9 @@ void SearchName();          // 按名字查找
 void SearchTel();           // 按手机号查找
 void SearchID();            // 按身份证号查找
 void SearchCarNum();        // 按车牌号查找
+void SearchDay();           // 按日期查找 精确到天 默认以实际出入时间为准
+void SearchPeriod();        // 按时间段查找 可精确到日时分三个模式 默认以实际出入时间为准
+void StoreRecord();         // 保存记录到文件中
 
 void SubmitApp();           // 申请
 void CheckI();              // 登入
@@ -70,6 +74,3 @@ void Hide();    // 隐藏光标
 void SetPosition(int x, int y);     // 设置起始位置
 void InitHitoArray(int length);     // 初始化数组 为一些成员赋值
 int TxtLine(char *fname);   // txt文件中的换行符数量
-
-void SearchDay();  //按日期查找，精确到天，默认日期以实际出入时间为准
-void SearchPeriod(); //  按时间段查找，可精确到天、时、分三个模式，默认时间以实际出入时间为准,如果以时、分两个模式查找，默认是同年同月同日
