@@ -29,8 +29,12 @@ int main() {
                 DeleteRecord();
                 break;
             case 3:
+                system("cls");
+                SortPrintTime();
                 break;
             case 4:
+                system("cls");
+                SortPrintOrder();
                 break;
             case 5:
                 system("cls");
@@ -45,6 +49,20 @@ int main() {
                 SearchID();
                 break;
             case 8:
+                system("cls");
+                SearchCarNum();
+                break;
+            case 9:
+                system("cls");
+                SearchDay();
+                break;
+            case 10:
+                system("cls");
+                SearchPeriod();
+                break;
+            case 11:
+                system("cls");
+                StoreRecord();
                 break;
             case 0:
                 system("cls");
@@ -98,6 +116,12 @@ int Menu() {
      8. 按车牌号查找
          8.1 精准查找
      */
+    /*
+     2期功能
+     9. 按日期查找
+     10. 按时间段查找
+     11. 信息保存
+     */
     SetPosition(POS_X1, ++pos_y);
     printf("1. 信息录入");
     SetPosition(POS_X4, pos_y);
@@ -114,6 +138,12 @@ int Menu() {
     printf("7. 按身份证号查找");
     SetPosition(POS_X4, pos_y);
     printf("8. 按车牌号查找");
+    SetPosition(POS_X1, pos_y += 2);
+    printf("9. 按日期查找");
+    SetPosition(POS_X4, pos_y);
+    printf("10. 按时间段查找");
+    SetPosition(POS_X1, pos_y += 2);
+    printf("11. 信息保存");
     SetPosition(POS_X1, pos_y += 2);
     printf("0. 退出");
     for (int i = 0; i < 2; i++) {   // '-' * 55
@@ -820,7 +850,7 @@ void StoreRecord() {
         fprintf(fp, " %d-%d-%d %d:%d:%d", hito[i].out_time_act.year, hito[i].out_time_act.mon,
                 hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
                 hito[i].out_time_act.sec);
-        fprintf(fp, " %s\n", hito[i].particular);
+        fprintf(fp, " %s", hito[i].particular);
     }
     fclose(fp);
     printf("保存完成");
@@ -863,106 +893,106 @@ void SortPrintTime() {
             SortByTime(4, 2);
             break;
     }
-
-
 }
 
 void SortByTime(int k, int m) {
     // k 4 different time moments m 1 ascend 2 descend
-    int i, j;
-    struct hito_info temp;
+    int temp;
     int temp_sum;
-    struct hito_info temp4sorting[count_record];
-    int sum[count_record];      //感谢count_record的作用
+    struct {
+        int index;
+        int sec_sum;
+    } toy[HITO_NUM];
+    for (int i = 0; i < 140; i++) {
+        toy[i].index = i;
+    }
     switch (k) {
         case 1:
-            for (i = 0; i < count_record; i++)             //把时间换算成总秒数来进行大小比较来实现排序
-            {
-                sum[i] = (hito[i].in_time_app.year % 2020) * 31104000 + hito[i].in_time_app.mon * 2592000 +
-                         hito[i].in_time_app.day * 86400 + hito[i].in_time_app.hour * 3600 +
-                         hito[i].in_time_app.min * 60 + hito[i].in_time_app.sec;
+            for (int i = 0; i < count_record; i++) {    //把时间换算成总秒数来进行大小比较来实现排序
+                toy[i].sec_sum = (hito[i].in_time_app.year - 2020) * 31622400 + hito[i].in_time_app.mon * 2678400 +
+                                 hito[i].in_time_app.day * 86400 + hito[i].in_time_app.hour * 3600 +
+                                 hito[i].in_time_app.min * 60 + hito[i].in_time_app.sec;
             }
             break;
         case 2:
-            for (i = 0; i < count_record; i++) {
-                sum[i] = (hito[i].out_time_app.year % 2020) * 31104000 + hito[i].out_time_app.mon * 2592000 +
-                         hito[i].out_time_app.day * 86400 + hito[i].out_time_app.hour * 3600 +
-                         hito[i].out_time_app.min * 60 + hito[i].out_time_app.sec;
+            for (int i = 0; i < count_record; i++) {    //把时间换算成总秒数来进行大小比较来实现排序
+                toy[i].sec_sum = (hito[i].out_time_app.year - 2020) * 31622400 + hito[i].out_time_app.mon * 2678400 +
+                                 hito[i].out_time_app.day * 86400 + hito[i].out_time_app.hour * 3600 +
+                                 hito[i].out_time_app.min * 60 + hito[i].out_time_app.sec;
             }
             break;
         case 3:
-            for (i = 0; i < count_record; i++) {
-                sum[i] = (hito[i].in_time_act.year % 2020) * 31104000 + hito[i].in_time_act.mon * 2592000 +
-                         hito[i].in_time_act.day * 86400 + hito[i].in_time_act.hour * 3600 +
-                         hito[i].in_time_act.min * 60 + hito[i].in_time_act.sec;
-            }
-            break;
         default:
-            for (i = 0; i < count_record; i++) {
-                sum[i] = (hito[i].out_time_act.year % 2020) * 31104000 + hito[i].out_time_act.mon * 2592000 +
-                         hito[i].out_time_act.day * 86400 + hito[i].out_time_act.hour * 3600 +
-                         hito[i].out_time_act.min * 60 + hito[i].out_time_act.sec;
+            for (int i = 0; i < count_record; i++) {    //把时间换算成总秒数来进行大小比较来实现排序
+                toy[i].sec_sum = (hito[i].in_time_act.year - 2020) * 31622400 + hito[i].in_time_act.mon * 2678400 +
+                                 hito[i].in_time_act.day * 86400 + hito[i].in_time_act.hour * 3600 +
+                                 hito[i].in_time_act.min * 60 + hito[i].in_time_act.sec;
             }
             break;
-    }
-    for (i = 0; i < count_record; i++) {
-        temp4sorting[i] = hito[i];
+        case 4:
+            for (int i = 0; i < count_record; i++) {    //把时间换算成总秒数来进行大小比较来实现排序
+                toy[i].sec_sum = (hito[i].out_time_act.year - 2020) * 31622400 + hito[i].out_time_act.mon * 2678400 +
+                                 hito[i].out_time_act.day * 86400 + hito[i].out_time_act.hour * 3600 +
+                                 hito[i].out_time_act.min * 60 + hito[i].out_time_act.sec;
+            }
+            break;
     }
 
     if (m == 1)
-        for (i = 0; i < count_record; i++) {
-            for (j = 0; j < count_record - 1 - i; j++) {
-                if (sum[j] > sum[j + 1]) {
-                    temp_sum = sum[j];
-                    sum[j] = sum[j + 1];
-                    sum[j + 1] = temp_sum;
-                    temp = temp4sorting[j];
-                    temp4sorting[j] = temp4sorting[j + 1];
-                    temp4sorting[j + 1] = temp;
+        for (int i = 0; i < count_record; i++) {
+            for (int j = 0; j < count_record - 1 - i; j++) {
+                if (toy[j].sec_sum > toy[j + 1].sec_sum) {
+                    temp_sum = toy[j].sec_sum;
+                    toy[j].sec_sum = toy[j + 1].sec_sum;
+                    toy[j + 1].sec_sum = temp_sum;
+                    temp = toy[j].index;
+                    toy[j].index = toy[j + 1].index;
+                    toy[j + 1].index = temp;
                 }
             }
         }
-
-
-    if (m == 2)
-        for (i = 0; i < count_record; i++) {
-            for (int j = count_record - 1; j > i; j--) {
-                if (sum[j - 1] > sum[j]) {
-                    temp_sum = sum[j - 1];
-                    sum[j - 1] = sum[j];
-                    sum[j] = temp_sum;
-                    temp = temp4sorting[j - 1];
-                    temp4sorting[j - 1] = temp4sorting[j];
-                    temp4sorting[j] = temp;
+    else if (m == 2)
+        for (int i = 0; i < count_record; i++) {
+            for (int j = 0; j < count_record - 1 - i; j++) {
+                if (toy[j].sec_sum < toy[j + 1].sec_sum) {
+                    temp_sum = toy[j].sec_sum;
+                    toy[j].sec_sum = toy[j + 1].sec_sum;
+                    toy[j + 1].sec_sum = temp_sum;
+                    temp = toy[j].index;
+                    toy[j].index = toy[j + 1].index;
+                    toy[j + 1].index = temp;
                 }
             }
-
-
         }
-    //保证原数组不变的思路：再定义一个空的结构体数组，把新次序换进去，而且在之后的录入顺序索引中会方便不少（简而言之就是变成没有工作量）
-    for (i = 0; i < count_record; i++) {
+    //保证原数组不变的思路 再定义一个空的结构体数组，把新次序换进去，而且在之后的录入顺序索引中会方便不少（简而言之就是变成没有工作量）
+    for (int i = 0; i < count_record; i++) {
         printf("%d. ", i + 1);
-        printf("姓名：%s, 身份证号：%s, 电话：%s\n", temp4sorting[i].name, temp4sorting[i].id, temp4sorting[i].tel);
-        printf("申请入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", temp4sorting[i].in_time_app.year, temp4sorting[i].in_time_app.mon,
-               temp4sorting[i].in_time_app.day, temp4sorting[i].in_time_app.hour, temp4sorting[i].in_time_app.min,
-               temp4sorting[i].in_time_app.sec);
-        printf("申请离校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", temp4sorting[i].out_time_app.year, temp4sorting[i].out_time_app.mon,
-               temp4sorting[i].out_time_app.day, temp4sorting[i].out_time_app.hour, temp4sorting[i].out_time_app.min,
-               temp4sorting[i].out_time_app.sec);
-        printf("实际入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", temp4sorting[i].in_time_act.year, temp4sorting[i].in_time_act.mon,
-               temp4sorting[i].in_time_act.day, temp4sorting[i].in_time_act.hour, temp4sorting[i].in_time_act.min,
-               temp4sorting[i].in_time_act.sec);
-        printf("实际离校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", temp4sorting[i].out_time_act.year, temp4sorting[i].out_time_act.mon,
-               temp4sorting[i].out_time_act.day, temp4sorting[i].out_time_act.hour, temp4sorting[i].out_time_act.min,
-               temp4sorting[i].out_time_act.sec);
+        printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[toy[i].index].name, hito[toy[i].index].id, hito[toy[i].index].tel);
+        printf("申请入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[toy[i].index].in_time_app.year,
+               hito[toy[i].index].in_time_app.mon,
+               hito[toy[i].index].in_time_app.day, hito[toy[i].index].in_time_app.hour,
+               hito[toy[i].index].in_time_app.min,
+               hito[toy[i].index].in_time_app.sec);
+        printf("申请离校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[toy[i].index].out_time_app.year,
+               hito[toy[i].index].out_time_app.mon,
+               hito[toy[i].index].out_time_app.day, hito[toy[i].index].out_time_app.hour,
+               hito[toy[i].index].out_time_app.min,
+               hito[toy[i].index].out_time_app.sec);
+        printf("实际入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[toy[i].index].in_time_act.year,
+               hito[toy[i].index].in_time_act.mon,
+               hito[toy[i].index].in_time_act.day, hito[toy[i].index].in_time_act.hour,
+               hito[toy[i].index].in_time_act.min,
+               hito[toy[i].index].in_time_act.sec);
+        printf("实际离校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[toy[i].index].out_time_act.year,
+               hito[toy[i].index].out_time_act.mon,
+               hito[toy[i].index].out_time_act.day, hito[toy[i].index].out_time_act.hour,
+               hito[toy[i].index].out_time_act.min,
+               hito[toy[i].index].out_time_act.sec);
         printf("\n");
     }
-
-
     Hide();        //隐藏光标
     char ch = _getch();
 }
-
 
 void SortPrintOrder() {
     int mode;
