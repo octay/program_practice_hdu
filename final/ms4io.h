@@ -57,6 +57,7 @@ int Menu();     // 菜单 返回选择
 void AppendRecord();        // 信息录入
 void DeleteRecord();        // 信息删除
 void SortPrintTime();       // 时间顺序索引
+void SortByTime(int k, int m);
 void SortPrintOrder();      // 录入顺序索引
 void SearchName();          // 按名字查找
 void SearchTel();           // 按手机号查找
