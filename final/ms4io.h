@@ -5,13 +5,13 @@
  * authors' github : @hphuimen @octay @yeshuimuhua
  * ver0.1
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <windows.h>
-#include <limits.h>
-#include <ctype.h>
-#include <conio.h>
+#include <stdio.h>      // 执行输入和输出
+#include <stdlib.h>     // 各种通用工具函数
+#include <string.h>     // 处理字符串
+#include <windows.h>    // windows的一些系统功能
+#include <limits.h>     // 查看一些变量的范围
+#include <ctype.h>      // 处理字符
+#include <conio.h>      // 控制台输入输出
 
 // starting x-coordinates
 #define POS_X1 35       // 菜单 第一列 & 输出提示 排序后

@@ -263,8 +263,8 @@ void AppendRecord() {
         for (int current_line = 1; current_line <= num_line; current_line++) {
             // 姓名 身份证号 手机号码 公司 车牌号 担保人姓名 担保人电话号码 健康码颜色 是否经过疫区 是否有症状 申请入校时间 申请出校时间 实际入校时间 实际出校时间 申请理由
             fscanf(fp, "%s %s %s %s %s %s %s %c %d %d", temp_hito.name, temp_hito.id, temp_hito.tel, temp_hito.company,
-                   temp_hito.car_num, temp_hito.guarantee_name, temp_hito.guarantee_tel, &temp_hito.health_code,
-                   &temp_hito.is_area, &temp_hito.is_symptom);
+                                                        temp_hito.car_num, temp_hito.guarantee_name, temp_hito.guarantee_tel, &temp_hito.health_code,
+                                                        &temp_hito.is_area, &temp_hito.is_symptom);
             fscanf(fp, "%d-%d-%d %d:%d:%d", &temp_hito.in_time_app.year, &temp_hito.in_time_app.mon,
                    &temp_hito.in_time_app.day, &temp_hito.in_time_app.hour, &temp_hito.in_time_app.min,
                    &temp_hito.in_time_app.sec);
