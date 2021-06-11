@@ -72,6 +72,8 @@ void SearchDay();           // 按日期查找 精确到天 默认以实际出�
 void SearchPeriod();        // 按时间段查找 可精确到日时分三个模式 默认以实际出入时间为准
 void StoreRecord();         // 保存记录到文件中
 
+int SearchName4IO(int accomplish_state);
+
 void SubmitApp();           // 申请
 void CheckI();              // 登入
 void CheckO();              // 登出
