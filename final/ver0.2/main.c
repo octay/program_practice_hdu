@@ -5,6 +5,12 @@
  * authors' github : @hphuimen @octay @yeshuimuhua
  * ver0.2
  */
+/*
+ * 作业日志 写一些笔记以免忘了
+ * void SortPrintTime() void SortByTime(int k, int m) 已经粗略地修改 尚未审核其功能性 大概会报错
+ * void SubmitApp() 初步写成 待审
+ * void CheckI() void CheckO() 没写呢
+ */
 
 #include "ms4io.h"
 
@@ -287,8 +293,7 @@ void SearchName() {
         printf("请输入你要查找的人的姓名：");
         scanf("%s", name2seek);
         for (i = 0; i < count_record; i++) {
-            if ((strcmp(hito[i].name, name2seek) == 0))   //按姓名查找，输出相应记录的姓名、身份证号、电话、申请出入时间和实际出入时间
-            {
+            if ((strcmp(hito[i].name, name2seek) == 0)) {   //按姓名查找，输出相应记录的姓名、身份证号、电话、申请出入时间和实际出入时间
                 printf("%d. ", k);
                 printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
                 printf("申请入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
@@ -864,7 +869,7 @@ void StoreRecord() {
     char ch = _getch();
 }
 
-//// 下面的接着改哈
+// 原先的函数之中需要对于void SortPrintTime() void SortByTime(int k, int m) 进行大量的修改
 void SortPrintTime() {
     int mode;
     printf("输入排序要求 1 申请入校时间 2 申请离校时间 3 实际入校时间 4 实际离校时间 1 升序 2 降序\n");
@@ -931,16 +936,19 @@ void SortByTime(int k, int m) {
         case 3:
         default:
             for (int i = 0; i < count_record; i++) {    //把时间换算成总秒数来进行大小比较来实现排序
-                toy[i].sec_sum = (hito[i].in_time_act.year - 2020) * 31622400 + hito[i].in_time_act.mon * 2678400 +
-                                 hito[i].in_time_act.day * 86400 + hito[i].in_time_act.hour * 3600 +
-                                 hito[i].in_time_act.min * 60 + hito[i].in_time_act.sec;
+                if (hito[i].accomplish >= 0)    // meaningful data no tame ni ...
+                    toy[i].sec_sum = (hito[i].in_time_act.year - 2020) * 31622400 + hito[i].in_time_act.mon * 2678400 +
+                                     hito[i].in_time_act.day * 86400 + hito[i].in_time_act.hour * 3600 +
+                                     hito[i].in_time_act.min * 60 + hito[i].in_time_act.sec;
             }
             break;
         case 4:
             for (int i = 0; i < count_record; i++) {    //把时间换算成总秒数来进行大小比较来实现排序
-                toy[i].sec_sum = (hito[i].out_time_act.year - 2020) * 31622400 + hito[i].out_time_act.mon * 2678400 +
-                                 hito[i].out_time_act.day * 86400 + hito[i].out_time_act.hour * 3600 +
-                                 hito[i].out_time_act.min * 60 + hito[i].out_time_act.sec;
+                if (hito[i].accomplish == 1)    // meaningful data no tame ni ...
+                    toy[i].sec_sum =
+                            (hito[i].out_time_act.year - 2020) * 31622400 + hito[i].out_time_act.mon * 2678400 +
+                            hito[i].out_time_act.day * 86400 + hito[i].out_time_act.hour * 3600 +
+                            hito[i].out_time_act.min * 60 + hito[i].out_time_act.sec;
             }
             break;
     }
@@ -972,29 +980,32 @@ void SortByTime(int k, int m) {
             }
         }
     //保证原数组不变的思路 再定义一个空的结构体数组，把新次序换进去，而且在之后的录入顺序索引中会方便不少（简而言之就是变成没有工作量）
+    int count_output = 0;
     for (int i = 0; i < count_record; i++) {
-        printf("%d. ", i + 1);
+        if ((k == 3 && hito[toy[i].index].accomplish == -1) || (k == 4 && hito[toy[i].index].accomplish != 1)) continue;
+        // 按照实际入校时间排序的情况下，accomplish状态为-1是无意义的。
+        // 同样地，按照实际离校时间排序的情况下，accomplish状态为-1或0是无意义的，就不打印辣。
+        printf("%d. ", count_output);
         printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[toy[i].index].name, hito[toy[i].index].id, hito[toy[i].index].tel);
         printf("申请入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[toy[i].index].in_time_app.year,
-               hito[toy[i].index].in_time_app.mon,
-               hito[toy[i].index].in_time_app.day, hito[toy[i].index].in_time_app.hour,
-               hito[toy[i].index].in_time_app.min,
+               hito[toy[i].index].in_time_app.mon, hito[toy[i].index].in_time_app.day,
+               hito[toy[i].index].in_time_app.hour, hito[toy[i].index].in_time_app.min,
                hito[toy[i].index].in_time_app.sec);
         printf("申请离校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[toy[i].index].out_time_app.year,
-               hito[toy[i].index].out_time_app.mon,
-               hito[toy[i].index].out_time_app.day, hito[toy[i].index].out_time_app.hour,
-               hito[toy[i].index].out_time_app.min,
+               hito[toy[i].index].out_time_app.mon, hito[toy[i].index].out_time_app.day,
+               hito[toy[i].index].out_time_app.hour, hito[toy[i].index].out_time_app.min,
                hito[toy[i].index].out_time_app.sec);
-        printf("实际入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[toy[i].index].in_time_act.year,
-               hito[toy[i].index].in_time_act.mon,
-               hito[toy[i].index].in_time_act.day, hito[toy[i].index].in_time_act.hour,
-               hito[toy[i].index].in_time_act.min,
-               hito[toy[i].index].in_time_act.sec);
-        printf("实际离校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[toy[i].index].out_time_act.year,
-               hito[toy[i].index].out_time_act.mon,
-               hito[toy[i].index].out_time_act.day, hito[toy[i].index].out_time_act.hour,
-               hito[toy[i].index].out_time_act.min,
-               hito[toy[i].index].out_time_act.sec);
+        if (hito[toy[i].index].accomplish >= 0)
+            printf("实际入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[toy[i].index].in_time_act.year,
+                   hito[toy[i].index].in_time_act.mon, hito[toy[i].index].in_time_act.day,
+                   hito[toy[i].index].in_time_act.hour, hito[toy[i].index].in_time_act.min,
+                   hito[toy[i].index].in_time_act.sec);
+        if (hito[toy[i].index].accomplish == 1)
+            printf("实际离校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[toy[i].index].out_time_act.year,
+                   hito[toy[i].index].out_time_act.mon, hito[toy[i].index].out_time_act.day,
+                   hito[toy[i].index].out_time_act.hour, hito[toy[i].index].out_time_act.min,
+                   hito[toy[i].index].out_time_act.sec);
+        count_output++;
         printf("\n");
     }
     Hide();        //隐藏光标
@@ -1014,11 +1025,14 @@ void SortPrintOrder() {
             printf("申请离校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
                    hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
                    hito[i].out_time_app.sec);
-            printf("实际入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
-                   hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min, hito[i].in_time_act.sec);
-            printf("实际离校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
-                   hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
-                   hito[i].out_time_act.sec);
+            if (hito[i].accomplish >= 0)
+                printf("实际入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                       hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
+                       hito[i].in_time_act.sec);
+            if (hito[i].accomplish == 1)
+                printf("实际离校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_act.year, hito[i].out_time_act.mon,
+                       hito[i].out_time_act.day, hito[i].out_time_act.hour, hito[i].out_time_act.min,
+                       hito[i].out_time_act.sec);
             printf("\n");
         }
     } else if (mode == 2) {
@@ -1034,19 +1048,109 @@ void SortPrintOrder() {
                    hito[count_record - i - 1].out_time_app.mon, hito[count_record - i - 1].out_time_app.day,
                    hito[count_record - i - 1].out_time_app.hour, hito[count_record - i - 1].out_time_app.min,
                    hito[count_record - i - 1].out_time_app.sec);
-            printf("实际入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[count_record - i - 1].in_time_act.year,
-                   hito[count_record - i - 1].in_time_act.mon, hito[count_record - i - 1].in_time_act.day,
-                   hito[count_record - i - 1].in_time_act.hour, hito[count_record - i - 1].in_time_act.min,
-                   hito[count_record - i - 1].in_time_act.sec);
-            printf("实际离校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[count_record - i - 1].out_time_act.year,
-                   hito[count_record - i - 1].out_time_act.mon, hito[count_record - i - 1].out_time_act.day,
-                   hito[count_record - i - 1].out_time_act.hour, hito[count_record - i - 1].out_time_act.min,
-                   hito[count_record - i - 1].out_time_act.sec);
+            if (hito[i].accomplish >= 0)
+                printf("实际入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[count_record - i - 1].in_time_act.year,
+                       hito[count_record - i - 1].in_time_act.mon, hito[count_record - i - 1].in_time_act.day,
+                       hito[count_record - i - 1].in_time_act.hour, hito[count_record - i - 1].in_time_act.min,
+                       hito[count_record - i - 1].in_time_act.sec);
+            if (hito[i].accomplish == 1)
+                printf("实际离校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[count_record - i - 1].out_time_act.year,
+                       hito[count_record - i - 1].out_time_act.mon, hito[count_record - i - 1].out_time_act.day,
+                       hito[count_record - i - 1].out_time_act.hour, hito[count_record - i - 1].out_time_act.min,
+                       hito[count_record - i - 1].out_time_act.sec);
             printf("\n");
         }
     }
     Hide();        //隐藏光标
     char ch = _getch();
+}
+
+void SubmitApp() {
+    // submit application, get info form console
+    int pos_y = 6;
+    struct hito_info temp_hito;
+
+    SetPosition(POS_X2, pos_y);
+    printf("输入 姓名");
+    scanf("%s", temp_hito.name);
+
+    SetPosition(POS_X2, pos_y += 2);
+    printf("输入 身份证号");
+    scanf("%s", temp_hito.id);
+    if (strlen(temp_hito.id) != 18) return;     // judge id
+    for (int i = 0; i < 17; ++i) if (!isdigit(temp_hito.id[i])) return;
+    if (isdigit(temp_hito.id[17] == 0 || temp_hito.id[17] == 'x' || temp_hito.id[17] == 'X')) return;
+    temp_hito.sex = (temp_hito.id[16] - '0' % 2 == 0) ? 2 : 1;  // judge sex from id
+
+    SetPosition(POS_X2, pos_y += 2);
+    printf("输入 手机号码");
+    scanf("%s", temp_hito.tel);
+    for (int i = 0; temp_hito.tel[i] != '\0'; ++i) if (!isdigit(temp_hito.tel[i])) return;  // judge tel
+
+    SetPosition(POS_X2, pos_y += 2);
+    printf("输入 公司");
+    scanf("%s", temp_hito.company);
+
+    SetPosition(POS_X2, pos_y += 2);
+    printf("输入 车牌号");
+    scanf("%s", temp_hito.car_num);
+
+    SetPosition(POS_X2, pos_y += 2);
+    printf("输入 担保人姓名");
+    scanf("%s", temp_hito.guarantee_name);
+
+    SetPosition(POS_X2, pos_y += 2);
+    printf("输入 担保人电话号码");
+    scanf("%s", temp_hito.guarantee_tel);
+    for (int i = 0; temp_hito.guarantee_tel[i] != '\0'; ++i) if (!isdigit(temp_hito.guarantee_tel[i])) return;
+
+    SetPosition(POS_X2, pos_y += 2);
+    char str_to_get_char[10];
+    printf("输入 健康码颜色 g.绿 y.黄 r.红");
+    scanf("%s", str_to_get_char);
+    temp_hito.health_code = str_to_get_char[0];
+    if (temp_hito.health_code != 'g' && temp_hito.health_code != 'y' && temp_hito.health_code != 'r') return;
+
+    int temp_input_num;
+    SetPosition(POS_X2, pos_y += 2);
+    printf("输入 是否经过疫区 0. 无 1. 有");
+    scanf("%d", &temp_input_num);
+    if (temp_input_num) temp_hito.is_area = 1;
+    else temp_hito.is_area = 0;
+
+    SetPosition(POS_X2, pos_y += 2);
+    printf("输入 是否有症状 0. 无 1. 有");
+    scanf("%d", &temp_input_num);
+    if (temp_input_num) temp_hito.is_symptom = 1;
+    else temp_hito.is_symptom = 0;
+
+    // format of time 年-月-日 时:分:秒
+    SetPosition(POS_X2, pos_y += 2);
+    printf("输入 申请入校时间 申请出校时间 format of time 年-月-日 时:分:秒");
+    scanf("%d-%d-%d %d:%d:%d", &temp_hito.in_time_app.year, &temp_hito.in_time_app.mon,
+          &temp_hito.in_time_app.day, &temp_hito.in_time_app.hour, &temp_hito.in_time_app.min,
+          &temp_hito.in_time_app.sec);
+    scanf("%d-%d-%d %d:%d:%d", &temp_hito.out_time_app.year, &temp_hito.out_time_app.mon,
+          &temp_hito.out_time_app.day, &temp_hito.out_time_app.hour, &temp_hito.out_time_app.min,
+          &temp_hito.out_time_app.sec);
+    temp_hito.accomplish = -1;      // this function is used to submit application so the accomplish state is -1
+
+    SetPosition(POS_X2, pos_y += 2);
+    printf("输入 申请理由");
+    gets(temp_hito.particular);
+
+    hito[count_record] = temp_hito;
+    count_record++;
+    SetPosition(POS_X2, pos_y += 2);
+    printf("录入完成");
+}
+
+void CheckI(){
+
+}
+
+void CheckO(){
+
 }
 
 // 不是系统模块函数
@@ -1068,18 +1172,14 @@ void SetPosition(int x, int y) {
 
 void InitHitoArray(int length) {
     // 处理标记 完成 or 未完成 不实现这个功能就是单纯的空函数
-    for (int i = 0; i < length; ++i) {
-        hito[i].accomplish = -1;
-    }
+    for (int i = 0; i < length; ++i) hito[i].accomplish = -1;
 }
 
 int TxtLine(char *fname) {
     FILE *fp;
     int count = 0;
     if ((fp = fopen(fname, "r"))) {
-        while (!feof(fp)) {
-            if ('\n' == fgetc(fp)) count++;
-        }
+        while (!feof(fp)) if ('\n' == fgetc(fp)) count++;
         fclose(fp);
     }
     return count;
