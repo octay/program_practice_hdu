@@ -640,6 +640,7 @@ void SearchPeriod() {
         scanf("%d", &end_day);
         int start_time = start_year * 10000 + start_mon * 100 + start_day;
         int end_time = end_year * 10000 + end_mon * 100 + end_day;
+        // start_time & end_time format yyyymmdd after calculating, ex. 2021 06 12 -> 20210612
         for (i = 0; i < count_record; i++) {
             if (hito[i].accomplish == -1) continue;
             int in_time = hito[i].in_time_act.year * 10000 + hito[i].in_time_act.mon * 100 + hito[i].in_time_act.day;
