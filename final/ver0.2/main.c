@@ -7,9 +7,8 @@
  */
 /*
  * 作业日志 写一些笔记以免忘了
- * void SortPrintTime() void SortByTime(int k, int m) 已经粗略地修改 尚未审核其功能性 大概会报错
- * void SubmitApp() 初步写成 待审
- * void CheckI() void CheckO() 没写呢
+ * 主函数以及目录菜单未改 导致一部分功能未实装
+ * 实装之后需要检查各个功能是否完备
  */
 
 #include "ms4io.h"
