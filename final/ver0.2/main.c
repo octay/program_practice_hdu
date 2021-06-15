@@ -103,7 +103,7 @@ int Menu() {
     SetPosition(POS_X4, pos_y);
     printf("4. 录入顺序索引");
     SetPosition(POS_X1, pos_y += 2);
-    printf("5. 按名字查找");
+    printf("5. 按姓名查找");
     SetPosition(POS_X4, pos_y);
     printf("6. 按手机号查找");
     SetPosition(POS_X1, pos_y += 2);
@@ -127,6 +127,7 @@ int Menu() {
     SetPosition(POS_X1, ++pos_y);
     printf("请选择 [  ]\b\b\b");
     scanf("%d", &dept_ch);
+    // int __cdecl scanf(const char * __restrict__ _Format,...) __MINGW_ATTRIB_DEPRECATED_SEC_WARN;
     return dept_ch;
 }
 
@@ -1145,12 +1146,219 @@ void SubmitApp() {
     printf("录入完成");
 }
 
-void CheckI(){
+void ChechI() {
+    int i;
+    int choice;
+    int index2check;
+    int search_mode = 1;
+    char name2seek[NAME_LEN];
+    char tel2seek[11 + 1];
+    char id2seek[18 + 1];
+    int m_year, m_mon, m_day, m_hour, m_min, m_sec;
+    printf("入校登记\n");
+    printf("选择查找标签 1. 姓名 2. 手机号 3. 身份证号\n");
+    scanf("%d", &search_mode);
+    switch (search_mode) {
+        case 1:
+            printf("入校者的姓名：");
+            scanf("%s", name2seek);
+            index2check = SearchName4IO(0, name2seek);
+            break;
+        case 2:
+            printf("入校者的手机号：");
+            scanf("%s", tel2seek);
+            index2check = SearchTel4IO(0, tel2seek);
+            break;
+        case 3:
+            printf("入校者的身份证号：");
+            scanf("%s", id2seek);
+            index2check = SearchID4IO(0, id2seek);
+            break;
+        default:
+            printf("模式输入错误\n");
+            Hide();
+            char ch = _getch();
+            return;
+    }
+    if (index2check == -1) {
+        Hide();
+        char ch = _getch();
+        return;
+    }   // 后续的不处理
 
+    printf("入校时间：");
+    scanf("%d-%d-%d %d:%d:%d", &m_year, &m_mon, &m_day, &m_hour, &m_min, &m_sec);
+    hito[index2check].in_time_act.year = m_year;
+    hito[index2check].in_time_act.mon = m_mon;
+    hito[index2check].in_time_act.day = m_day;
+    hito[index2check].in_time_act.hour = m_hour;
+    hito[index2check].in_time_act.min = m_min;
+    hito[index2check].in_time_act.sec = m_sec;
+    hito[index2check].accomplish = 0;
+    Hide();
+    char ch = _getch();
 }
 
-void CheckO(){
+void CheckO() {
+    int i;
+    int choice;
+    int index2check;
+    int search_mode = 1;
+    char name2seek[NAME_LEN];
+    char tel2seek[11 + 1];
+    char id2seek[18 + 1];
+    int m_year, m_mon, m_day, m_hour, m_min, m_sec;
+    printf("离校登记\n");
+    printf("选择查找标签 1. 姓名 2. 手机号 3. 身份证号\n");
+    scanf("%d", &search_mode);
+    switch (search_mode) {
+        case 1:
+            printf("离校者的姓名：");
+            scanf("%s", name2seek);
+            index2check = SearchName4IO(0, name2seek);
+            break;
+        case 2:
+            printf("离校者的手机号：");
+            scanf("%s", tel2seek);
+            index2check = SearchTel4IO(0, tel2seek);
+            break;
+        case 3:
+            printf("离校者的身份证号：");
+            scanf("%s", id2seek);
+            index2check = SearchID4IO(0, id2seek);
+            break;
+        default:
+            printf("模式输入错误\n");
+            Hide();
+            char ch = _getch();
+            return;
+    }
 
+    if (index2check == -1) {
+        Hide();
+        char ch = _getch();
+        return;
+    }   // 后续的不处理
+
+    printf("离校时间：");
+    scanf("%d-%d-%d %d:%d:%d", &m_year, &m_mon, &m_day, &m_hour, &m_min, &m_sec);
+    hito[index2check].out_time_act.year = m_year;
+    hito[index2check].out_time_act.mon = m_mon;
+    hito[index2check].out_time_act.day = m_day;
+    hito[index2check].out_time_act.hour = m_hour;
+    hito[index2check].out_time_act.min = m_min;
+    hito[index2check].out_time_act.sec = m_sec;
+    hito[index2check].accomplish = 1;
+    Hide();
+    char ch = _getch();
+}
+
+int SearchName4IO(int accomplish_state, char *name2seek) {
+    int index[HITO_NUM];
+    int k = 1;
+    for (int i = 0; i < count_record; i++) {
+        if ((strcmp(hito[i].name, name2seek) == 0) && hito[i].accomplish == accomplish_state) {
+            printf("%d. ", k);
+            printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
+            printf("申请入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                   hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
+                   hito[i].in_time_app.sec);
+            printf("申请离校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                   hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
+                   hito[i].out_time_app.sec);
+            if (hito[i].accomplish >= 0)    // 可改成 if (accomplish_state == 0)
+                printf("实际入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                       hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
+                       hito[i].in_time_act.sec);
+            index[k - 1] = i;
+            k++;
+            printf("\n");
+        }
+    }
+    if (k == 1) {
+        printf("未找到这个姓名对应的记录\n");
+        return -1;
+    } else printf("一共找到%d条记录\n", k - 1);
+    // 这个k的设置还是有一些笨拙的 不过已经用它写了这么多函数再修改也不现实 凑合着用吧
+    printf("请选择：");
+    int choice = 1;
+    scanf("%d", &choice);
+    if (choice <= 0 && choice >= k) {
+        printf("输入错误\n");
+        return -1;
+    } else return index[choice - 1];
+}
+
+int SearchTel4IO(int accomplish_state, char *tel2seek) {
+    int index[HITO_NUM];
+    int k = 1;
+    for (int i = 0; i < count_record; i++) {
+        if ((strcmp(hito[i].tel, tel2seek) == 0) && hito[i].accomplish == accomplish_state) {
+            printf("%d. ", k);
+            printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
+            printf("申请入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                   hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
+                   hito[i].in_time_app.sec);
+            printf("申请离校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                   hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
+                   hito[i].out_time_app.sec);
+            if (hito[i].accomplish >= 0)    // 可改成 if (accomplish_state == 0)
+                printf("实际入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                       hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
+                       hito[i].in_time_act.sec);
+            index[k - 1] = i;
+            k++;
+            printf("\n");
+        }
+    }
+    if (k == 1) {
+        printf("未找到这个电话对应的记录\n");
+        return -1;
+    } else printf("一共找到%d条记录\n", k - 1);
+    // 这个k的设置还是有一些笨拙的 不过已经用它写了这么多函数再修改也不现实 凑合着用吧
+    printf("请选择：");
+    int choice = 1;
+    scanf("%d", &choice);
+    if (choice <= 0 && choice >= k) {
+        printf("输入错误\n");
+        return -1;
+    } else return index[choice - 1];
+}
+
+int SearchID4IO(int accomplish_state, char *id2seek) {
+    int index[HITO_NUM];
+    int k = 1;
+    for (int i = 0; i < count_record; i++) {
+        if ((strcmp(hito[i].id, id2seek) == 0) && hito[i].accomplish == accomplish_state) {
+            printf("%d. ", k);
+            printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[i].name, hito[i].id, hito[i].tel);
+            printf("申请入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_app.year, hito[i].in_time_app.mon,
+                   hito[i].in_time_app.day, hito[i].in_time_app.hour, hito[i].in_time_app.min,
+                   hito[i].in_time_app.sec);
+            printf("申请离校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].out_time_app.year, hito[i].out_time_app.mon,
+                   hito[i].out_time_app.day, hito[i].out_time_app.hour, hito[i].out_time_app.min,
+                   hito[i].out_time_app.sec);
+            if (hito[i].accomplish >= 0)    // 可改成 if (accomplish_state == 0)
+                printf("实际入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[i].in_time_act.year, hito[i].in_time_act.mon,
+                       hito[i].in_time_act.day, hito[i].in_time_act.hour, hito[i].in_time_act.min,
+                       hito[i].in_time_act.sec);
+            index[k - 1] = i;
+            k++;
+            printf("\n");
+        }
+    }
+    if (k == 1) {
+        printf("未找到这个身份证号对应的记录\n");
+        return -1;
+    } else printf("一共找到%d条记录\n", k - 1);
+    // 这个k的设置还是有一些笨拙的 不过已经用它写了这么多函数再修改也不现实 凑合着用吧
+    printf("请选择：");
+    int choice = 1;
+    scanf("%d", &choice);
+    if (choice <= 0 && choice >= k) {
+        printf("输入错误\n");
+        return -1;
+    } else return index[choice - 1];
 }
 
 // 不是系统模块函数

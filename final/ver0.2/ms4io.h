@@ -6,6 +6,9 @@
  * ver0.2
  */
 
+#ifndef ms4io_h
+#define ms4io_h
+
 #include <stdio.h>      // 执行输入和输出
 #include <stdlib.h>     // 各种通用工具函数
 #include <string.h>     // 处理字符串
@@ -63,8 +66,9 @@ void AppendRecord();        // 信息录入
 void DeleteRecord();        // 信息删除
 void SortPrintTime();       // 时间顺序索引
 void SortByTime(int k, int m);
+
 void SortPrintOrder();      // 录入顺序索引
-void SearchName();          // 按名字查找
+void SearchName();          // 按姓名查找
 void SearchTel();           // 按手机号查找
 void SearchID();            // 按身份证号查找
 void SearchCarNum();        // 按车牌号查找
@@ -72,13 +76,18 @@ void SearchDay();           // 按日期查找 精确到天 默认以实际出�
 void SearchPeriod();        // 按时间段查找 可精确到日时分三个模式 默认以实际出入时间为准
 void StoreRecord();         // 保存记录到文件中
 
-int SearchName4IO(int accomplish_state);
-
 void SubmitApp();           // 申请
 void CheckI();              // 登入
 void CheckO();              // 登出
+
+// 4IO 为登入登出服务的函数 内接调用
+int SearchName4IO(int accomplish_state, char *name2seek);
+int SearchTel4IO(int accomplish_state, char *tel2seek);
+int SearchID4IO(int accomplish_state, char *id2seek);
 
 void Hide();    // 隐藏光标
 void SetPosition(int x, int y);     // 设置起始位置
 void InitHitoArray(int length);     // 初始化数组 为一些成员赋值
 int TxtLine(char *fname);   // txt文件中的换行符数量
+
+#endif
