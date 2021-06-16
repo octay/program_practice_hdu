@@ -63,11 +63,19 @@ int main() {
                 break;
             case 10:
                 system("cls");
-                SearchPeriod();
+                StoreRecord();
                 break;
             case 11:
                 system("cls");
-                StoreRecord();
+                SubmitApp();
+                break;
+            case 12:
+                system("cls");
+                CheckI();
+                break;
+            case 13:
+                system("cls");
+                CheckO();
                 break;
             case 0:
                 system("cls");
@@ -112,11 +120,17 @@ int Menu() {
     SetPosition(POS_X1, pos_y += 2);
     printf("9. 按日期查找");
     SetPosition(POS_X4, pos_y);
-    printf("10. 按时间段查找");
+    printf("10. 信息保存");
     SetPosition(POS_X1, pos_y += 2);
-    printf("11. 信息保存");
+    printf("11. 申请");
+    SetPosition(POS_X4, pos_y);
+    printf("12. 登入");
+    SetPosition(POS_X1, pos_y += 2);
+    printf("13. 登出");
+
     SetPosition(POS_X1, pos_y += 2);
     printf("0. 退出");
+
     for (int i = 0; i < 2; i++) {   // '-' * 55
         SetPosition(POS_X1, ++pos_y);
         for (int j = 0; j < 55; j++) {
@@ -1143,9 +1157,11 @@ void SubmitApp() {
     count_record++;
     SetPosition(POS_X2, pos_y += 2);
     printf("录入完成");
+    Hide();        //隐藏光标
+    char ch = _getch();
 }
 
-void ChechI() {
+void CheckI() {
     int i;
     int choice;
     int index2check;
@@ -1161,17 +1177,17 @@ void ChechI() {
         case 1:
             printf("入校者的姓名：");
             scanf("%s", name2seek);
-            index2check = SearchName4IO(0, name2seek);
+            index2check = SearchName4IO(-1, name2seek);
             break;
         case 2:
             printf("入校者的手机号：");
             scanf("%s", tel2seek);
-            index2check = SearchTel4IO(0, tel2seek);
+            index2check = SearchTel4IO(-1, tel2seek);
             break;
         case 3:
             printf("入校者的身份证号：");
             scanf("%s", id2seek);
-            index2check = SearchID4IO(0, id2seek);
+            index2check = SearchID4IO(-1, id2seek);
             break;
         default:
             printf("模式输入错误\n");
@@ -1194,6 +1210,7 @@ void ChechI() {
     hito[index2check].in_time_act.min = m_min;
     hito[index2check].in_time_act.sec = m_sec;
     hito[index2check].accomplish = 0;
+    printf("登入完成");
     Hide();
     char ch = _getch();
 }
@@ -1248,6 +1265,7 @@ void CheckO() {
     hito[index2check].out_time_act.min = m_min;
     hito[index2check].out_time_act.sec = m_sec;
     hito[index2check].accomplish = 1;
+    printf("登出完成");
     Hide();
     char ch = _getch();
 }
