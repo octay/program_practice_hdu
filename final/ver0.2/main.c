@@ -5,11 +5,6 @@
  * authors' github : @hphuimen @octay @yeshuimuhua
  * ver0.2
  */
-/*
- * 作业日志 写一些笔记以免忘了
- * 主函数以及目录菜单未改 导致一部分功能未实装
- * 实装之后需要检查各个功能是否完备
- */
 
 #include "ms4io.h"
 
@@ -999,7 +994,7 @@ void SortByTime(int k, int m) {
         if ((k == 3 && hito[toy[i].index].accomplish == -1) || (k == 4 && hito[toy[i].index].accomplish != 1)) continue;
         // 按照实际入校时间排序的情况下，accomplish状态为-1是无意义的。
         // 同样地，按照实际离校时间排序的情况下，accomplish状态为-1或0是无意义的，就不打印辣。
-        printf("%d. ", count_output);
+        printf("%d. ", count_output + 1);
         printf("姓名：%s, 身份证号：%s, 电话：%s\n", hito[toy[i].index].name, hito[toy[i].index].id, hito[toy[i].index].tel);
         printf("申请入校时间：%04d年%02d月%02d日%02d时%02d分%02d秒\n", hito[toy[i].index].in_time_app.year,
                hito[toy[i].index].in_time_app.mon, hito[toy[i].index].in_time_app.day,
