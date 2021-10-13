@@ -63,6 +63,24 @@ void reverse(struct node *ori){
     }
 };
 
+void reverse_ver2(struct node *ori) {
+    struct node *ori_mr = ori;  // 在本程序中 ori_mr是在变化的，使用元ori来找到原先的链表头结点
+    struct node *p, *q;
+    struct node *r = ori_mr -> next;    // 第一个有数据的结点
+    while (r -> next) {
+        p = ori_mr;
+        q = ori_mr;
+        while(p -> next){
+            q = p;
+            p = p -> next;
+        }
+        q -> next = p -> next;  // NULL end of l
+        p -> next = ori_mr -> next;
+        ori_mr -> next = p;
+        ori_mr = p;     // 下一个需要做插入处理的点就是在新处理的结点之后了就是说
+    }
+};
+
 int main(void){
     struct node *po_head = create();
     struct node *ne_head = create();
